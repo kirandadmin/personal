@@ -1,0 +1,273 @@
+============================================================================================================================
+### Basic notes on OpenShift ###
+
+# basic notes on openshift - 1 #
+
+Worker nodes host your application containers, grouped as pods. 
+
+The control plane nodes run services that are required to control the Kubernetes cluster.
+
+A node is a virtual or bare-metal machine in a Kubernetes cluster.
+
+The following components of a node are responsible for maintaining the running of pods and providing the Kubernetes runtime environment:
+
+Container runtime:: The container runtime is responsible for running containers. Kubernetes offers several runtimes such as containerd, cri-o, rktlet, and Docker.
+
+Kubelet:: Kubelet runs on nodes and reads the container manifests. It ensures that the defined containers have started and are running. The kubelet process maintains the state of work and the node server. Kubelet manages network rules and port forwarding. The kubelet manages containers that are created by Kubernetes only.
+
+Kube-proxy:: Kube-proxy runs on every node in the cluster and maintains the network traffic between the Kubernetes resources. A Kube-proxy ensures that the networking environment is isolated and accessible.
+
+
+DNS:: Cluster DNS is a DNS server which serves DNS records for Kubernetes services. Containers started by Kubernetes automatically include this DNS server in their DNS searches.
+============================================================================================================================
+
+Glossary of common terms for OpenShift Container Platform nodes
+This glossary defines common terms that are used in the node content.
+
+Container
+It is a lightweight and executable image that comprises software and all its dependencies. Containers virtualize the operating system, as a result, you can run containers anywhere from a data center to a public or private cloud to even a developer’s laptop.
+
+Daemon set
+Ensures that a replica of the pod runs on eligible nodes in an OpenShift Container Platform cluster.
+
+egress : The process of data sharing externally through a network’s outbound traffic from a pod.
+
+garbage collection
+The process of cleaning up cluster resources, such as terminated containers and images that are not referenced by any running pods.
+
+Horizontal Pod Autoscaler(HPA)
+Implemented as a Kubernetes API resource and a controller. You can use the HPA to specify the minimum and maximum number of pods that you want to run. You can also specify the CPU or memory utilization that your pods should target. The HPA scales out and scales in pods when a given CPU or memory threshold is crossed.
+
+
+Ingress : Incoming traffic to a pod.
+
+Job
+A process that runs to completion. A job creates one or more pod objects and ensures that the specified pods are successfully completed.
+
+Labels
+You can use labels, which are key-value pairs, to organise and select subsets of objects, such as a pod.
+
+Node
+A worker machine in the OpenShift Container Platform cluster. A node can be either be a virtual machine (VM) or a physical machine.
+
+
+Node Tuning Operator
+You can use the Node Tuning Operator to manage node-level tuning by using the TuneD daemon. It ensures custom tuning specifications are passed to all containerized TuneD daemons running in the cluster in the format that the daemons understand. The daemons run on all nodes in the cluster, one per node.
+
+Self Node Remediation Operator
+The Operator runs on the cluster nodes and identifies and reboots nodes that are unhealthy.
+
+Pod
+One or more containers with shared resources, such as volume and IP addresses, running in your OpenShift Container Platform cluster. A pod is the smallest compute unit defined, deployed, and managed.
+
+Toleration
+Indicates that the pod is allowed (but not required) to be scheduled on nodes or node groups with matching taints. You can use tolerations to enable the scheduler to schedule pods with matching taints.
+
+Taint
+A core object that comprises a key,value, and effect. Taints and tolerations work together to ensure that pods are not scheduled on irrelevant nodes.
+
+============================================================================================================================
+
+1 Master Components:
+
+1.1 API Server : The Kubernetes API server validates and configures the data for pods, services, and replication controllers. It also assigns pods to nodes and synchronizes pod information with service configuration.
+
+1.2 etcd : etcd stores the persistent master state while other components watch etcd for changes to bring themselves into the desired state. etcd can be optionally configured for high availability, typically deployed with 2n+1 peer services.
+
+1.3 Controller Manager Server : The controller manager server watches etcd for changes to replication controller objects and then uses the API to enforce the desired state. Can be run as a standalone process. Several such processes create a cluster with one active leader at a time.   
+
+
+
+2 Worker Node:
+A worker node is a node that runs the application in a cluster and reports to a control plane.
+
+The main responsibilities of a worker node is to process data stored in the cluster and handle networking to ensure traffic between the application across the cluster and outside of the cluster are properly facilitated. 
+
+Tasks for the worker node are assigned by the control plane of the cluster.
+
+There are two main components to worker nodes: 
+
+2.1 Kubelet Service – each worker node has a Kubelet process that ensures efficient communication in the cluster and executes worker node tasks 
+
+
+2.2 Kube-proxy Service – enables communication between servers within the cluster
+
+============================================================================================================================
+
+# basic notes on openshift - 2 #
+
+What is difference between pod and container ?
+
+Kubernetes pods are collections of containers that share the same resources and local network. This enables easy communication between containers in a pod. The lifecycle of a pod is tied to its host node.
+
+What Are Kubernetes Containers?
+
+A container is at the lowest level in the nodes-pods-containers hierarchy
+
+From : <https://www.containiq.com/post/kubernetes-nodes-vs-pods-vs-containers>
+
+============================================================================================================================
+About autoscaling pods on a node
+OpenShift Container Platform offers three tools that you can use to automatically scale the number of pods on your nodes and the resources allocated to pods.
+
+Horizontal Pod Autoscaler
+The Horizontal Pod Autoscaler (HPA) can automatically increase or decrease the scale of a replication controller or deployment configuration, based on metrics collected from the pods that belong to that replication controller or deployment configuration.
+
+For more information, see Automatically scaling pods with the horizontal pod autoscaler.
+https://docs.openshift.com/container-platform/4.15/nodes/pods/nodes-pods-autoscaling.html#nodes-pods-autoscaling
+
+
+Custom Metrics Autoscaler
+The Custom Metrics Autoscaler can automatically increase or decrease the number of pods for a deployment, stateful set, custom resource, or job based on custom metrics that are not based only on CPU or memory.
+
+For more information, see Custom Metrics Autoscaler Operator overview.
+
+Vertical Pod Autoscaler
+The Vertical Pod Autoscaler (VPA) can automatically review the historic and current CPU and memory resources for containers in pods and can update the resource limits and requests based on the usage values it learns.
+
+For more information, see Automatically adjust pod resource levels with the vertical pod autoscaler.
+https://docs.openshift.com/container-platform/4.15/nodes/pods/nodes-pods-vertical-autoscaler.html#nodes-pods-vpa
+============================================================================================================================
+# basic notes on openshift - 3 #
+
+Cluster: An OpenShift Kubernetes cluster consisting of a control plane and one or more worker nodes.
+
+Pod: The smallest deployable Kubernetes unit in OpenShift. A Kubernetes pod instance could have a single container or multiple containers running as sidecars.
+
+Application instance: An “application” may be a single-pod instance or may be deployed across multiple-pod instances that make up an application service. For example, a highly available Tomcat application service may consist of two or more Tomcat pods.
+
+
+Worker node: Instances (VMs or bare-metal hosts) of Red Hat Enterprise Linux or Red Hat Enterprise Linux CoreOS where end-user application pods run. OpenShift environments can have many worker nodes.
+
+
+Control plane nodes: Instances (VMs or bare-metal hosts) of Red Hat Enterprise Linux CoreOS that act as the Kubernetes orchestration/management layer for OpenShift. Control plane nodes are included in self-managed OpenShift subscriptions. 
+
+Infrastructure nodes: Instances (virtual or physical hosts) of Red Hat Enterprise Linux or Red Hat Enterprise Linux CoreOS that are running pods supporting OpenShift’s cluster infrastructure or running the HAProxy-based load balancer for ingress traffic. Infrastructure nodes are included in self-managed OpenShift subscriptions. See the Red Hat OpenShift control plane and infrastructure nodes section below for more details.
+
+In summary:
+
+Applications are packaged in container images.
+Containers are deployed as pods.
+Pods run on Kubernetes worker nodes, which are managed by the Kubernetes control plane nodes.
+
+
+master -> Role (control and computer node)
+worker -> Role (compute node)
+
+Using the full-stack automation method, all nodes of the new cluster run Red Hat Enterprise Linux CoreOS (RHEL CoreOS). 
+
+Using the pre-existing infrastructure method, compute nodes can be set up using Red Hat Enterprise Linux (RHEL), but the control plane still requires RHEL CoreOS.
+
+
+
+Master Node:
+
+Master node, or cluster master, is a unified endpoint within a cluster which oversees activity on each node.
+
+Master node responsibilities consist of scheduling deployment and distributing work to be installed on the nodes. Worker nodes that run the services can run or stop based on master node requests.
+
+Worker nodes self-report statuses and activities to the master node which determines whether nodes need to be repaired, upgraded, or removed. The master node can add or remove nodes if a node fails.
+
+Master: A host with the master role will operate as a control plane host.
+
+Master Components:
+
+API Server : The Kubernetes API server validates and configures the data for pods, services, and replication controllers. It also assigns pods to nodes and synchronizes pod information with service configuration.
+
+etcd : etcd stores the persistent master state while other components watch etcd for changes to bring themselves into the desired state. etcd can be optionally configured for high availability, typically deployed with 2n+1 peer services.
+
+Controller Manager Server : The controller manager server watches etcd for changes to replication controller objects and then uses the API to enforce the desired state. Can be run as a standalone process. Several such processes create a cluster with one active leader at a time.   
+
+
+
+Worker Node:
+A worker node is a node that runs the application in a cluster and reports to a control plane.
+
+The main responsibilities of a worker node is to process data stored in the cluster and handle networking to ensure traffic between the application across the cluster and outside of the cluster are properly facilitated. 
+
+Tasks for the worker node are assigned by the control plane of the cluster.
+
+There are two main components to worker nodes: 
+
+Kubelet Service – each worker node has a Kubelet process that ensures efficient communication in the cluster and executes worker node tasks 
+
+Kube-proxy Service – enables communication between servers within the cluster
+
+
+Type				Node Role
+
+Master				Host web console and service catalog items.
+Master				etcd data
+
+Infrastructure node		Host Red Hat OpenShift Container Platform infrastructure pods (registry, router, logging, metrics,…​)
+Masters, Infra and App Nodes	Store docker images
+
+Application node		Host applications deployed on Red Hat OpenShift Container Platform
+Masters, Infra and App Nodes	Pod local storage
+
+
+1. Master/Control plan node (from 4.x onwards it's control plane node) - apiserver, scheduler, controller and etcd (CoreOS - Mandatory)
+2. Worker/Compute node (from 4.x onwards it's compute node) - (CoreOS) -
+3. Infra Node - node server which contain infrastructure services like monitoring, DNS, logging, external, routing and loadbalancer etc.
+
+A Full Stack cluster architecture consists of the following:
+
+Control plane nodes: Manages workloads for the compute nodes and runs services required to control the cluster (Components: etcd, api, scheduler controller manager)
+Compute nodes: Location where the actual workloads requested by Kubernetes users run and are managed (Components: CRI-O, kube-proxy)
+Infrastructure nodes: Run core infrastructure components such as service brokers and logging (Components: Routers, Registry)
+
+What is Master Node in Kubernetes?
+A master node is a node which controls and manages a set of worker nodes (workloads runtime) and resembles a cluster in Kubernetes. 
+
+A master node has the following components to help manage worker nodes:
+
+Kube-APIServer, which acts as the frontend to the cluster. All external communication to the cluster is via the API-Server.
+
+Kube-Controller-Manager, which runs a set of controllers for the running cluster. The controller-manager implements governance across the cluster.
+
+Etcd, the cluster state database.
+
+Kube Scheduler, which schedules activities to the worker nodes based on events occurring on the etcd. 
+It also holds the nodes resources plan to determine the proper action for the triggered event. 
+For example the scheduler would figure out which worker node will host a newly scheduled POD.
+
+A container is at the lowest level in the nodes-pods-containers hierarchy
+
+
+NAME                   STATUS    ROLES     AGE       VERSION
+master.example.com     Ready     master    7h        v1.26.0
+node1.example.com      Ready     worker    7h        v1.26.0
+node2.example.com      Ready     worker    7h        v1.26.0
+
+NAME                STATUS   ROLES    AGE    VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE                                                       KERNEL-VERSION                 CONTAINER-RUNTIME
+master.example.com  Ready    master   171m   v1.26.0   10.0.129.108   <none>        Red Hat Enterprise Linux CoreOS 48.83.202103210901-0 (Ootpa)   4.18.0-240.15.1.el8_3.x86_64   cri-o://1.26.0-30.rhaos4.10.gitf2f339d.el8-dev
+node1.example.com   Ready    worker   72m    v1.26.0   10.0.129.222   <none>        Red Hat Enterprise Linux CoreOS 48.83.202103210901-0 (Ootpa)   4.18.0-240.15.1.el8_3.x86_64   cri-o://1.26.0-30.rhaos4.10.gitf2f339d.el8-dev
+node2.example.com   Ready    worker   164m   v1.26.0   10.0.142.150   <none>        Red Hat Enterprise Linux CoreOS 48.83.202103210901-0 (Ootpa)   4.18.0-240.15.1.el8_3.x86_64   cri-o://1.26.0-30.rhaos4.10.gitf2f339d.el8-dev
+
+
+Questions: 
+
+We have the Red Hat Infrastructure Subscription - Can we use this subscription for RHCOS ?
+
+Assume we have some master/worker nodes in bare metal and some of them are 
+
+322 - Red Hat does not support OpenShift clusters using both bare metal and software layer hypervisors.
+
+Similarly, we do not support multiple cloud providers for the same clusters. 
+
+How the DR setup will design for openshift architecture
+
+Points from RedHat:
+proposal from RFP:
+The proposal should include 480 vCPU license for the container platform
+
+PTR:
+OCP has its own disaster recovery
+
+============================================================================================================================
+
+
+Red Hat OpenShift AI, Premium (2 Cores or 4 vCPUs) - Qty 90
+Red Hat OpenShift Broker/Master Infrastructure (2 Cores) - Qty 120
+Red Hat OpenShift Platform Plus with Red Hat OpenShift Data Foundation Advanced, Premium (2 Cores or 4 vCPUs) - Qty 120
+
