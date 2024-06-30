@@ -271,3 +271,37 @@ Red Hat OpenShift AI, Premium (2 Cores or 4 vCPUs) - Qty 90
 Red Hat OpenShift Broker/Master Infrastructure (2 Cores) - Qty 120
 Red Hat OpenShift Platform Plus with Red Hat OpenShift Data Foundation Advanced, Premium (2 Cores or 4 vCPUs) - Qty 120
 
+### To retrieve the cluster version. 
+[user@host ~]$ oc get clusterversion
+
+### To obtain more detailed information about the cluster status.
+[user@host ~]$ oc describe clusterversion
+
+### To retrieve the list of all cluster operators
+[user@host ~]$ oc get clusteroperators
+
+
+### Displaying the Logs of OpenShift Nodes
+[user@host ~]$ oc adm node-logs -u crio my-node-name
+[user@host ~]$ oc adm node-logs -u kubelet my-node-name
+
+You can also display all journal logs of a node:
+[user@host ~]$ oc adm node-logs my-node-name
+
+### Opening a Shell Prompt on an OpenShift Node
+[user@host ~]$ oc debug node/my-node-name
+...output omitted...
+sh-4.4# chroot /host
+sh-4.4# systemctl is-active kubelet
+active
+sh-4.4# systemctl is-active crio
+active
+
+### verify that the etcd pod is running.
+sh-4.4# crictl ps --name etcd
+CONTAINER ... STATE NAME ATTEMPT POD ID
+5e18a8220a9d5 ... Running etcd-operator 2 90b6b1150e3fe8d9adceeb5549
+19bc3ed5e8643 ... Running etcd-metrics 3 c94baa4f55618
+...output omitted...
+
+============================================================================================================================
